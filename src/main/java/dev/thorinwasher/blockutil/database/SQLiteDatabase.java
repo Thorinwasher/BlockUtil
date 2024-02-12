@@ -1,4 +1,4 @@
-package dev.thorinwasher.noblockdrops.database;
+package dev.thorinwasher.blockutil.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

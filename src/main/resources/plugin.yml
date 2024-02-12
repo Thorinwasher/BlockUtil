@@ -1,5 +1,5 @@
-name: NoBlockDrops
+name: BlockUtil
 version: @version@
-main: dev.thorinwasher.noblockdrops.NoBlockDrops
+main: dev.thorinwasher.blockutil.BlockUtil
 description: A library to disable block drops completely from registered blocks
 api-version: 1.20

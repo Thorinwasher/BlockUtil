@@ -1,13 +1,13 @@
-package dev.thorinwasher.noblockdrops;
+package dev.thorinwasher.blockutil;
 
-import dev.thorinwasher.noblockdrops.api.NoBlockDropsAPI;
-import dev.thorinwasher.noblockdrops.database.DatabaseInterface;
-import dev.thorinwasher.noblockdrops.database.SQLDatabaseAPI;
-import dev.thorinwasher.noblockdrops.database.SQLiteDatabase;
-import dev.thorinwasher.noblockdrops.listener.BlockEventListener;
-import dev.thorinwasher.noblockdrops.listener.ExplodeEventListener;
-import dev.thorinwasher.noblockdrops.listener.PistonEventListener;
-import dev.thorinwasher.noblockdrops.thread.ThreadQueue;
+import dev.thorinwasher.blockutil.api.BlockUtilAPI;
+import dev.thorinwasher.blockutil.database.DatabaseInterface;
+import dev.thorinwasher.blockutil.database.SQLDatabaseAPI;
+import dev.thorinwasher.blockutil.database.SQLiteDatabase;
+import dev.thorinwasher.blockutil.listener.BlockEventListener;
+import dev.thorinwasher.blockutil.listener.ExplodeEventListener;
+import dev.thorinwasher.blockutil.listener.PistonEventListener;
+import dev.thorinwasher.blockutil.thread.ThreadQueue;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
@@ -18,7 +18,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NoBlockDrops extends JavaPlugin implements NoBlockDropsAPI {
+public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
 
     private DatabaseInterface databaseInterface;
     private Set<BlockLocation> trackedBlocks = new HashSet<>();
@@ -33,7 +33,7 @@ public class NoBlockDrops extends JavaPlugin implements NoBlockDropsAPI {
         databaseInterface.init();
         trackedBlocks.addAll(databaseInterface.getAllBlocks());
         ThreadQueue.enableQueue(this);
-        this.getServer().getServicesManager().register(NoBlockDropsAPI.class, this, this, ServicePriority.High);
+        this.getServer().getServicesManager().register(BlockUtilAPI.class, this, this, ServicePriority.High);
         registerListeners();
     }
 

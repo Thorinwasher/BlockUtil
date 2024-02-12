@@ -1,4 +1,4 @@
-package dev.thorinwasher.noblockdrops;
+package dev.thorinwasher.blockutil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

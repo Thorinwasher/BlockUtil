@@ -1,8 +1,6 @@
-package dev.thorinwasher.noblockdrops.listener;
+package dev.thorinwasher.blockutil.listener;
 
-import dev.thorinwasher.noblockdrops.api.NoBlockDropsAPI;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import dev.thorinwasher.blockutil.api.BlockUtilAPI;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,18 +9,14 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 
-import java.util.List;
-
 public class BlockEventListener implements Listener {
 
-    private final NoBlockDropsAPI api;
+    private final BlockUtilAPI api;
 
-    public BlockEventListener(NoBlockDropsAPI api) {
+    public BlockEventListener(BlockUtilAPI api) {
         this.api = api;
     }
 

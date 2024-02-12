@@ -1,4 +1,4 @@
-package dev.thorinwasher.noblockdrops;
+package dev.thorinwasher.blockutil;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
@@ -14,16 +14,16 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class NoBlockDropsTest {
+class BlockUtilTest {
 
-    private NoBlockDrops plugin;
+    private BlockUtil plugin;
     private WorldMock world;
     private ServerMock server;
 
     @BeforeEach
     void setUp() {
         this.server = MockBukkit.mock();
-        this.plugin = MockBukkit.load(NoBlockDrops.class);
+        this.plugin = MockBukkit.load(BlockUtil.class);
         this.world = server.addSimpleWorld("AWorld");
     }
 

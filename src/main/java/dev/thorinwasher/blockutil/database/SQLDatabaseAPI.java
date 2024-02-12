@@ -1,4 +1,4 @@
-package dev.thorinwasher.noblockdrops.database;
+package dev.thorinwasher.blockutil.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;

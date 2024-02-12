@@ -1,4 +1,4 @@
-package dev.thorinwasher.noblockdrops.listener;
+package dev.thorinwasher.blockutil.listener;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
@@ -6,17 +6,15 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.block.BlockMock;
 import be.seeseemelk.mockbukkit.entity.ItemEntityMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import dev.thorinwasher.noblockdrops.NoBlockDrops;
+import dev.thorinwasher.blockutil.BlockUtil;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Item;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
-import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -33,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BlockEventListenerTest {
 
-    private NoBlockDrops noBlockDrops;
+    private BlockUtil blockUtil;
     private BlockMock trackedBlock;
     private WorldMock world;
     private PlayerMock player;
@@ -43,12 +41,12 @@ class BlockEventListenerTest {
     @BeforeEach
     void setUp() {
         this.serverMock = MockBukkit.mock();
-        this.noBlockDrops = MockBukkit.load(NoBlockDrops.class);
+        this.blockUtil = MockBukkit.load(BlockUtil.class);
         this.world = serverMock.addSimpleWorld("world");
         this.trackedBlock = new BlockMock(new Location(world, 0, 0, 0));
         this.notTrackedBlock = new BlockMock(new Location(world, 1, 0, 0));
         this.player = serverMock.addPlayer();
-        noBlockDrops.trackBlock(trackedBlock);
+        blockUtil.trackBlock(trackedBlock);
     }
 
     @AfterEach
@@ -74,28 +72,28 @@ class BlockEventListenerTest {
     void onBlockBreak() {
         BlockBreakEvent blockBreakEvent = new BlockBreakEvent(trackedBlock, player);
         assertTrue(blockBreakEvent.callEvent());
-        assertFalse(noBlockDrops.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockIsTracked(trackedBlock));
     }
 
     @Test
     void onBlockBurn() {
         BlockBurnEvent blockBurnEvent = new BlockBurnEvent(trackedBlock, notTrackedBlock);
         assertTrue(blockBurnEvent.callEvent());
-        assertFalse(noBlockDrops.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockIsTracked(trackedBlock));
     }
 
     @Test
     void onBlockFade() {
         BlockFadeEvent blockFadeEvent= new BlockFadeEvent(trackedBlock, trackedBlock.getState());
         assertTrue(blockFadeEvent.callEvent());
-        assertFalse(noBlockDrops.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockIsTracked(trackedBlock));
     }
 
     @Test
     void onBlockForm() {
         BlockFormEvent blockFormEvent = new BlockFormEvent(trackedBlock,trackedBlock.getState());
         assertTrue(blockFormEvent.callEvent());
-        assertFalse(noBlockDrops.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockIsTracked(trackedBlock));
     }
 
     @Test
@@ -103,13 +101,13 @@ class BlockEventListenerTest {
         BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent(trackedBlock,trackedBlock.getState(),
                 trackedBlock.getRelative(BlockFace.UP),ItemStack.empty(),player,true, EquipmentSlot.HAND);
         assertTrue(blockPlaceEvent.callEvent());
-        assertFalse(noBlockDrops.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockIsTracked(trackedBlock));
     }
 
     @Test
     void onLeavesDecay() {
         LeavesDecayEvent leavesDecayEvent = new LeavesDecayEvent(trackedBlock);
         assertTrue(leavesDecayEvent.callEvent());
-        assertFalse(noBlockDrops.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockIsTracked(trackedBlock));
     }
 }

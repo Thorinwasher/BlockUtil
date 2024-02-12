@@ -1,6 +1,6 @@
-package dev.thorinwasher.noblockdrops.listener;
+package dev.thorinwasher.blockutil.listener;
 
-import dev.thorinwasher.noblockdrops.api.NoBlockDropsAPI;
+import dev.thorinwasher.blockutil.api.BlockUtilAPI;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
@@ -13,9 +13,9 @@ import java.util.List;
 
 public class PistonEventListener implements Listener {
 
-    private final NoBlockDropsAPI api;
+    private final BlockUtilAPI api;
 
-    public PistonEventListener(NoBlockDropsAPI api){
+    public PistonEventListener(BlockUtilAPI api){
         this.api = api;
     }
 

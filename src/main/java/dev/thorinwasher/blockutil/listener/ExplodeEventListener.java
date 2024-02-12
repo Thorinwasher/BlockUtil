@@ -1,6 +1,6 @@
-package dev.thorinwasher.noblockdrops.listener;
+package dev.thorinwasher.blockutil.listener;
 
-import dev.thorinwasher.noblockdrops.api.NoBlockDropsAPI;
+import dev.thorinwasher.blockutil.api.BlockUtilAPI;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -9,9 +9,9 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class ExplodeEventListener implements Listener {
 
-    private final NoBlockDropsAPI plugin;
+    private final BlockUtilAPI plugin;
 
-    public ExplodeEventListener(NoBlockDropsAPI plugin) {
+    public ExplodeEventListener(BlockUtilAPI plugin) {
         this.plugin = plugin;
     }
 

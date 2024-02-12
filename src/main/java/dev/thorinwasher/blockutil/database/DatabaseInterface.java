@@ -1,8 +1,8 @@
-package dev.thorinwasher.noblockdrops.database;
+package dev.thorinwasher.blockutil.database;
 
-import dev.thorinwasher.noblockdrops.BlockLocation;
-import dev.thorinwasher.noblockdrops.NoBlockDrops;
-import dev.thorinwasher.noblockdrops.util.FileUtil;
+import dev.thorinwasher.blockutil.BlockLocation;
+import dev.thorinwasher.blockutil.BlockUtil;
+import dev.thorinwasher.blockutil.util.FileUtil;
 import org.bukkit.util.BlockVector;
 
 import java.io.IOException;
@@ -102,7 +102,7 @@ public class DatabaseInterface {
     private Map<SQLQuery, String> loadQueries() {
         Map<SQLQuery, String> output = new EnumMap<>(SQLQuery.class);
         for (SQLQuery query : SQLQuery.values()) {
-            try (InputStream inputStream = NoBlockDrops.class.getResourceAsStream("/database/" + query.getFileName() + ".sql")) {
+            try (InputStream inputStream = BlockUtil.class.getResourceAsStream("/database/" + query.getFileName() + ".sql")) {
                 output.put(query, FileUtil.readStreamToString(inputStream));
             } catch (IOException e) {
                 throw new RuntimeException(e);

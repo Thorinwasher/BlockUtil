@@ -1,4 +1,4 @@
-package dev.thorinwasher.noblockdrops.database;
+package dev.thorinwasher.blockutil.database;
 
 public enum SQLQuery {
     CREATE_BLOCK_TABLE("createBlockTable"),

@@ -1,4 +1,4 @@
-package dev.thorinwasher.noblockdrops.util;
+package dev.thorinwasher.blockutil.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,11 +1,10 @@
-package dev.thorinwasher.noblockdrops.listener;
+package dev.thorinwasher.blockutil.listener;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.block.BlockMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import dev.thorinwasher.noblockdrops.NoBlockDrops;
+import dev.thorinwasher.blockutil.BlockUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PistonEventListenerTest {
 
     private ServerMock serverMock;
-    private NoBlockDrops noBlockDrops;
+    private BlockUtil blockUtil;
     private WorldMock world;
     private BlockMock trackedBlock;
     private BlockMock notTrackedBlock;
@@ -30,11 +29,11 @@ class PistonEventListenerTest {
     @BeforeEach
     void setUp() {
         this.serverMock = MockBukkit.mock();
-        this.noBlockDrops = MockBukkit.load(NoBlockDrops.class);
+        this.blockUtil = MockBukkit.load(BlockUtil.class);
         this.world = serverMock.addSimpleWorld("world");
         this.trackedBlock = new BlockMock(new Location(world, 0, 0, 0));
         this.notTrackedBlock = new BlockMock(new Location(world, 1, 0, 0));
-        noBlockDrops.trackBlock(trackedBlock);
+        blockUtil.trackBlock(trackedBlock);
     }
 
     @AfterEach
@@ -46,18 +45,18 @@ class PistonEventListenerTest {
     void onBlockPistonExtend() {
         BlockPistonExtendEvent blockPistonExtendEvent = new BlockPistonExtendEvent(notTrackedBlock, List.of(trackedBlock, notTrackedBlock), BlockFace.UP);
         assertTrue(blockPistonExtendEvent.callEvent());
-        assertFalse(noBlockDrops.blockIsTracked(trackedBlock));
-        assertTrue(noBlockDrops.blockIsTracked(trackedBlock.getRelative(BlockFace.UP)));
-        assertFalse(noBlockDrops.blockIsTracked(notTrackedBlock.getRelative(BlockFace.UP)));
+        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertTrue(blockUtil.blockIsTracked(trackedBlock.getRelative(BlockFace.UP)));
+        assertFalse(blockUtil.blockIsTracked(notTrackedBlock.getRelative(BlockFace.UP)));
     }
 
     @Test
     void onBlockPistonRetract() {
         BlockPistonRetractEvent blockPistonExtendEvent = new BlockPistonRetractEvent(notTrackedBlock, List.of(trackedBlock, notTrackedBlock), BlockFace.UP);
         assertTrue(blockPistonExtendEvent.callEvent());
-        assertFalse(noBlockDrops.blockIsTracked(trackedBlock));
-        assertTrue(noBlockDrops.blockIsTracked(trackedBlock.getRelative(BlockFace.UP)));
+        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertTrue(blockUtil.blockIsTracked(trackedBlock.getRelative(BlockFace.UP)));
         Block movedNotTrackedBlock = notTrackedBlock.getRelative(BlockFace.UP);
-        assertFalse(noBlockDrops.blockIsTracked(movedNotTrackedBlock));
+        assertFalse(blockUtil.blockIsTracked(movedNotTrackedBlock));
     }
 }

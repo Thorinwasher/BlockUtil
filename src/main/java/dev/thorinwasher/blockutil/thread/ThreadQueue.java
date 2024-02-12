@@ -1,4 +1,4 @@
-package dev.thorinwasher.noblockdrops.thread;
+package dev.thorinwasher.blockutil.thread;
 
 import org.bukkit.plugin.Plugin;
 

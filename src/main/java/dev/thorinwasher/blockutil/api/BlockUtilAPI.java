@@ -1,9 +1,9 @@
-package dev.thorinwasher.noblockdrops.api;
+package dev.thorinwasher.blockutil.api;
 
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockVector;
 
-public interface NoBlockDropsAPI {
+public interface BlockUtilAPI {
 
     void trackBlock(Block block);
 
