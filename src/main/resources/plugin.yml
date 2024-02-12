@@ -1,0 +1,5 @@
+name: NoBlockDrops
+version: @version@
+main: dev.thorinwasher.noblockdrops.NoBlockDrops
+description: A library to disable block drops completely from registered blocks
+api-version: 1.20
