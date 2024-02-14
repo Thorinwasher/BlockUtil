@@ -1,5 +1,6 @@
 package dev.thorinwasher.blockutil.thread;
 
+import dev.thorinwasher.blockutil.BlockUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -31,5 +32,17 @@ public class ThreadHelper {
         } catch (ClassNotFoundException e){
             return false;
         }
+    }
+
+    public static void runGlobalTask(Runnable runnable, BlockUtil blockUtil) {
+        if(FOLIA){
+            Bukkit.getServer().getAsyncScheduler().runNow(blockUtil, (ignored) -> runnable.run());
+        }
+        new BukkitRunnable(){
+            @Override
+            public void run(){
+                runnable.run();
+            }
+        }.runTask(blockUtil);
     }
 }

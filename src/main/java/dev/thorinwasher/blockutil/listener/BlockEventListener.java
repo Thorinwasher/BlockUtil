@@ -1,6 +1,7 @@
 package dev.thorinwasher.blockutil.listener;
 
-import dev.thorinwasher.blockutil.api.BlockUtilAPI;
+import dev.thorinwasher.blockutil.BlockUtil;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -9,14 +10,15 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.util.BlockVector;
 
 public class BlockEventListener implements Listener {
 
-    private final BlockUtilAPI api;
+    private final BlockUtil api;
 
-    public BlockEventListener(BlockUtilAPI api) {
+    public BlockEventListener(BlockUtil api) {
         this.api = api;
     }
 
@@ -48,8 +50,12 @@ public class BlockEventListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    void onBlockPlace(BlockPlaceEvent event) {
-        api.freeBlock(event.getBlock());
+    void onBlockFromTo(BlockFromToEvent event) {
+        if (event.getBlock().getType() != Material.DRAGON_EGG) {
+            return;
+        }
+        BlockVector delta = event.getToBlock().getLocation().subtract(event.getBlock().getLocation()).toVector().toBlockVector();
+        api.moveBlock(event.getBlock(), delta);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

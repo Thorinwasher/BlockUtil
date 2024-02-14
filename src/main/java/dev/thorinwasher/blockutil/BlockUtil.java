@@ -5,9 +5,12 @@ import dev.thorinwasher.blockutil.database.DatabaseInterface;
 import dev.thorinwasher.blockutil.database.SQLDatabaseAPI;
 import dev.thorinwasher.blockutil.database.SQLiteDatabase;
 import dev.thorinwasher.blockutil.listener.BlockEventListener;
+import dev.thorinwasher.blockutil.listener.EntityEventListener;
 import dev.thorinwasher.blockutil.listener.ExplodeEventListener;
 import dev.thorinwasher.blockutil.listener.PistonEventListener;
+import dev.thorinwasher.blockutil.thread.ThreadHelper;
 import dev.thorinwasher.blockutil.thread.ThreadQueue;
+import dev.thorinwasher.blockutil.util.StructureUtil;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
@@ -16,6 +19,7 @@ import org.bukkit.util.BlockVector;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
@@ -42,6 +46,7 @@ public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
         pluginManager.registerEvents(new BlockEventListener(this), this);
         pluginManager.registerEvents(new PistonEventListener(this), this);
         pluginManager.registerEvents(new ExplodeEventListener(this), this);
+        pluginManager.registerEvents(new EntityEventListener(this), this);
     }
 
     @Override
@@ -52,22 +57,28 @@ public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
 
     @Override
     public void trackBlock(Block block) {
-        if (blockIsTracked(block)) {
-            return;
-        }
-        BlockLocation blockLocation = new BlockLocation(block.getLocation());
-        ThreadQueue.addToQueue(() -> databaseInterface.trackBlock(blockLocation));
-        trackedBlocks.add(blockLocation);
+        List<Block> blockStructure = StructureUtil.getBlockStructure(block);
+        blockStructure.forEach(blockInStructure -> {
+            if (blockIsTracked(block)) {
+                return;
+            }
+            BlockLocation blockLocation = new BlockLocation(blockInStructure.getLocation());
+            ThreadQueue.addToQueue(() -> databaseInterface.trackBlock(blockLocation));
+            trackedBlocks.add(blockLocation);
+        });
     }
 
     @Override
     public void freeBlock(Block block) {
-        if (!blockIsTracked(block)) {
-            return;
-        }
-        BlockLocation blockLocation = new BlockLocation(block.getLocation());
-        ThreadQueue.addToQueue(() -> databaseInterface.freeBlock(blockLocation));
-        trackedBlocks.remove(blockLocation);
+        List<Block> blockStructure = StructureUtil.getBlockStructure(block);
+        blockStructure.forEach(blockInStructure -> {
+            if (!blockIsTracked(block)) {
+                return;
+            }
+            BlockLocation blockLocation = new BlockLocation(blockInStructure.getLocation());
+            ThreadQueue.addToQueue(() -> databaseInterface.freeBlock(blockLocation));
+            ThreadHelper.runGlobalTask(() -> trackedBlocks.remove(blockLocation), this);
+        });
     }
 
     @Override
