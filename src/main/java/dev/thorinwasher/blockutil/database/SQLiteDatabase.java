@@ -40,7 +40,6 @@ public class SQLiteDatabase implements SQLDatabaseAPI {
         config.setDriverClassName("org.sqlite.JDBC");
         config.setJdbcUrl("jdbc:sqlite:" + databaseFile);
         config.setMaxLifetime(60000); // 60 Sec
-        config.setIdleTimeout(45000); // 45 Sec
         config.setMaximumPoolSize(50); // 50 Connections (including idle connections)
         source = new HikariDataSource(config);
     }
