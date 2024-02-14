@@ -10,7 +10,7 @@ import dev.thorinwasher.blockutil.listener.ExplodeEventListener;
 import dev.thorinwasher.blockutil.listener.PistonEventListener;
 import dev.thorinwasher.blockutil.thread.ThreadHelper;
 import dev.thorinwasher.blockutil.thread.ThreadQueue;
-import dev.thorinwasher.blockutil.util.StructureUtil;
+import dev.thorinwasher.blockutil.util.BlockHelper;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicePriority;
@@ -57,7 +57,7 @@ public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
 
     @Override
     public void trackBlock(Block block) {
-        List<Block> blockStructure = StructureUtil.getBlockStructure(block);
+        List<Block> blockStructure = BlockHelper.getBlockStructure(block);
         blockStructure.forEach(blockInStructure -> {
             if (blockIsTracked(block)) {
                 return;
@@ -70,7 +70,7 @@ public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
 
     @Override
     public void freeBlock(Block block) {
-        List<Block> blockStructure = StructureUtil.getBlockStructure(block);
+        List<Block> blockStructure = BlockHelper.getBlockStructure(block);
         blockStructure.forEach(blockInStructure -> {
             if (!blockIsTracked(block)) {
                 return;
@@ -79,6 +79,7 @@ public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
             ThreadQueue.addToQueue(() -> databaseInterface.freeBlock(blockLocation));
             ThreadHelper.runGlobalTask(() -> trackedBlocks.remove(blockLocation), this);
         });
+
     }
 
     @Override

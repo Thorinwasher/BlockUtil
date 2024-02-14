@@ -1,17 +1,24 @@
 package dev.thorinwasher.blockutil.util;
 
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.PistonHead;
+import org.bukkit.block.data.type.TrapDoor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class StructureUtil {
+public class BlockHelper {
+
+    private static final Set<Material> NEEDS_BLOCK_BELOW = getNeedsBlockBelow();
 
     public static List<Block> getBlockStructure(Block block) {
         BlockData blockData = block.getBlockData();
@@ -35,12 +42,16 @@ public class StructureUtil {
                 return List.of(block, otherPart);
             }
         }
-        if (blockData instanceof Bisected bisected) {
-            Block otherPart = bisected.getHalf() == Bisected.Half.BOTTOM ? block.getRelative(BlockFace.UP) : block.getRelative(BlockFace.DOWN);
+        if (blockData instanceof Door door) {
+            Block otherPart = door.getHalf() == Bisected.Half.BOTTOM ? block.getRelative(BlockFace.UP) : block.getRelative(BlockFace.DOWN);
             if (otherPart.getType() == blockData.getMaterial()) {
                 return List.of(block, otherPart);
             }
         }
         return List.of(block);
+    }
+
+    public static boolean needsBlockBelow(Block block) {
+        return NEEDS_BLOCK_BELOW.contains(block.getType());
     }
 }
