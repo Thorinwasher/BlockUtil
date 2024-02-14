@@ -33,7 +33,7 @@ public class PistonEventListener implements Listener {
     void onBlockPistonRetract(BlockPistonRetractEvent event) {
         handlePistonEvent(event.getBlocks(), event.getDirection());
         if(api.blockIsTracked(event.getBlock()) && event.getBlocks().isEmpty()){
-            api.trackBlock(event.getBlock().getRelative(event.getDirection().getOppositeFace()));
+            api.freeBlock(event.getBlock().getRelative(event.getDirection().getOppositeFace()));
         }
     }
 
