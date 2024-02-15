@@ -16,7 +16,7 @@ import java.util.List;
 public class BlockHelper {
 
 
-    private BlockHelper(){
+    private BlockHelper() {
         throw new IllegalStateException("Utility class");
     }
 
@@ -51,7 +51,15 @@ public class BlockHelper {
         return List.of(block);
     }
 
-    public static void breakBlock(Block block, BlockUtilAPI api){
+    public static void breakBlock(Block block, BlockUtilAPI api) {
+        block.setType(Material.AIR);
+        api.freeBlock(block);
+    }
+
+    public static void breakBlockIfTracked(Block block, BlockUtilAPI api) {
+        if (!api.blockIsTracked(block)) {
+            return;
+        }
         block.setType(Material.AIR);
         api.freeBlock(block);
     }

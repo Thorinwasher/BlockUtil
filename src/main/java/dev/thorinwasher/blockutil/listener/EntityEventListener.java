@@ -3,10 +3,8 @@ package dev.thorinwasher.blockutil.listener;
 import dev.thorinwasher.blockutil.BlockUtil;
 import dev.thorinwasher.blockutil.util.BlockHelper;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
@@ -16,7 +14,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.logging.Level;
 import java.util.stream.Stream;
 
 public class EntityEventListener implements Listener {
@@ -91,12 +88,12 @@ public class EntityEventListener implements Listener {
             }
             return;
         }
-        if(event.getEntity() instanceof Wither){
+        if (event.getEntity() instanceof Wither) {
             BlockHelper.breakBlock(event.getBlock(), blockUtilAPI);
         }
-        if(event.getBlock().getType() == Material.FARMLAND){
+        if (event.getBlock().getType() == Material.FARMLAND) {
             Block up = event.getBlock().getRelative(BlockFace.UP);
-            if(blockUtilAPI.blockIsTracked(up)){
+            if (blockUtilAPI.blockIsTracked(up)) {
                 event.setCancelled(true);
                 BlockHelper.breakBlock(up, blockUtilAPI);
                 event.getBlock().setBlockData(event.getBlockData());
