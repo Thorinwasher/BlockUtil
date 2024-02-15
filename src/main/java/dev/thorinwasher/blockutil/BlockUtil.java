@@ -5,6 +5,7 @@ import dev.thorinwasher.blockutil.database.DatabaseInterface;
 import dev.thorinwasher.blockutil.database.SQLDatabaseAPI;
 import dev.thorinwasher.blockutil.database.SQLiteDatabase;
 import dev.thorinwasher.blockutil.listener.BlockEventListener;
+import dev.thorinwasher.blockutil.listener.BlockGrowEventListener;
 import dev.thorinwasher.blockutil.listener.EntityEventListener;
 import dev.thorinwasher.blockutil.listener.ExplodeEventListener;
 import dev.thorinwasher.blockutil.listener.PistonEventListener;
@@ -47,6 +48,7 @@ public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
         pluginManager.registerEvents(new PistonEventListener(this), this);
         pluginManager.registerEvents(new ExplodeEventListener(this), this);
         pluginManager.registerEvents(new EntityEventListener(this), this);
+        pluginManager.registerEvents(new BlockGrowEventListener(this), this);
     }
 
     @Override
