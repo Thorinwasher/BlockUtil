@@ -1,7 +1,10 @@
 package dev.thorinwasher.blockutil.listener;
 
 import dev.thorinwasher.blockutil.BlockUtil;
+import dev.thorinwasher.blockutil.util.BlockHelper;
 import org.bukkit.Material;
+import org.bukkit.Tag;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,10 +14,9 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.util.BlockVector;
-
-import java.util.logging.Level;
 
 public class BlockEventListener implements Listener {
 
@@ -58,10 +60,9 @@ public class BlockEventListener implements Listener {
             api.moveBlock(event.getBlock(), delta);
             return;
         }
-        if(api.blockIsTracked(event.getToBlock())){
+        if (api.blockIsTracked(event.getToBlock())) {
             event.setCancelled(true);
-            event.getToBlock().setType(Material.AIR);
-            api.freeBlock(event.getToBlock());
+            BlockHelper.breakBlock(event.getToBlock(), api);
         }
     }
 
@@ -70,5 +71,15 @@ public class BlockEventListener implements Listener {
         api.freeBlock(event.getBlock());
     }
 
-
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    void onBlockPhysicsEvent(BlockPhysicsEvent event) {
+        Block block = event.getBlock();
+        if (block.getType().isAir()) {
+            return;
+        }
+        if (!block.getBlockData().isSupported(block) && api.blockIsTracked(block)) {
+            event.setCancelled(true);
+            BlockHelper.breakBlock(block, api);
+        }
+    }
 }

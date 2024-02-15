@@ -41,10 +41,7 @@ public class PistonEventListener implements Listener {
     private void handlePistonEvent(List<Block> blocks, BlockFace direction) {
         for (Block block : blocks) {
             if (willBreakOnPistonMove(blocks, block, direction)) {
-                if (api.blockIsTracked(block)) {
-                    block.setType(Material.AIR);
-                    api.freeBlock(block);
-                }
+                BlockHelper.breakBlockIfTracked(block, api);
             } else {
                 api.moveBlock(block, direction.getDirection().toBlockVector());
             }
