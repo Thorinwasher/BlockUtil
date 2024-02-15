@@ -6,10 +6,15 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.world.StructureGrowEvent;
+
+import java.util.logging.Level;
 
 public class BlockGrowEventListener implements Listener {
 
@@ -35,5 +40,18 @@ public class BlockGrowEventListener implements Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    void onStructureGrow(StructureGrowEvent event) {
+        if (api.blockIsTracked(event.getLocation().getBlock())) {
+            event.getBlocks().stream().map(BlockState::getBlock).forEach(api::trackBlock);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    void onBlockSpread(BlockSpreadEvent event) {
+        if (api.blockIsTracked(event.getSource())) {
+            api.trackBlock(event.getBlock());
+        }
+    }
 
 }
