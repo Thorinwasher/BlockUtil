@@ -9,7 +9,7 @@ A library that is meant to assist in block management. Currently it only has 4 a
     <scope>provided</scope>
 </dependency>
 ```
-And you need to of course add the project as a dependency or a soft dependency in your `plugin.yml` (Shading is not supported). This is how you use the API:
+And you need to of course add the project as a dependency or a soft dependency in your `plugin.yml` (Shading is not supported). This is how you use access the API:
 ```java
 @Override
 public void onEnable(){
