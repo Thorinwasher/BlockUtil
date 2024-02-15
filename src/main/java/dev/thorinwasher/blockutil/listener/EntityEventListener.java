@@ -53,7 +53,7 @@ public class EntityEventListener implements Listener {
                 baseBlock.getRelative(0, 2, 1),
                 baseBlock.getRelative(0, 2, -1)
         );
-        return blockStream.anyMatch(blockUtilAPI::blockIsTracked);
+        return blockStream.anyMatch(blockUtilAPI::blockCanNotDropItems);
     }
 
     private boolean checkIrongolem(Block baseBlock) {
@@ -64,14 +64,14 @@ public class EntityEventListener implements Listener {
                 baseBlock.getRelative(0, 1, 1),
                 baseBlock.getRelative(0, 1, -1),
                 baseBlock.getRelative(0, 2, 0));
-        return blockStream.anyMatch(blockUtilAPI::blockIsTracked);
+        return blockStream.anyMatch(blockUtilAPI::blockCanNotDropItems);
     }
 
     private boolean checkSnowman(Block baseBlock) {
         Stream<Block> blockStream = Stream.of(baseBlock,
                 baseBlock.getRelative(0, 1, 0),
                 baseBlock.getRelative(0, 2, 0));
-        return blockStream.anyMatch(blockUtilAPI::blockIsTracked);
+        return blockStream.anyMatch(blockUtilAPI::blockCanNotDropItems);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
@@ -79,12 +79,12 @@ public class EntityEventListener implements Listener {
         if (event.getEntity() instanceof FallingBlock fallingBlock) {
             if (event.getBlock().getType().isAir()) {
                 if (fallingBlock.getMetadata(NO_BLOCK_DROP).get(0).asBoolean()) {
-                    blockUtilAPI.trackBlock(event.getBlock());
+                    blockUtilAPI.disableItemDrops(event.getBlock());
                 }
-            } else if (blockUtilAPI.blockIsTracked(event.getBlock())) {
+            } else if (blockUtilAPI.blockCanNotDropItems(event.getBlock())) {
                 event.getEntity().setMetadata(NO_BLOCK_DROP, new FixedMetadataValue(blockUtilAPI, true));
                 fallingBlock.setDropItem(false);
-                blockUtilAPI.freeBlock(event.getBlock());
+                blockUtilAPI.enableItemDrops(event.getBlock());
             }
             return;
         }
@@ -93,7 +93,7 @@ public class EntityEventListener implements Listener {
         }
         if (event.getBlock().getType() == Material.FARMLAND) {
             Block up = event.getBlock().getRelative(BlockFace.UP);
-            if (blockUtilAPI.blockIsTracked(up)) {
+            if (blockUtilAPI.blockCanNotDropItems(up)) {
                 event.setCancelled(true);
                 BlockHelper.breakBlock(up, blockUtilAPI);
                 event.getBlock().setBlockData(event.getBlockData());

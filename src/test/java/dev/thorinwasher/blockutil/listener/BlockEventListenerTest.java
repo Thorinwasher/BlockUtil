@@ -46,7 +46,7 @@ class BlockEventListenerTest {
         this.trackedBlock = new BlockMock(new Location(world, 0, 0, 0));
         this.notTrackedBlock = new BlockMock(new Location(world, 1, 0, 0));
         this.player = serverMock.addPlayer();
-        blockUtil.trackBlock(trackedBlock);
+        blockUtil.disableItemDrops(trackedBlock);
     }
 
     @AfterEach
@@ -72,28 +72,28 @@ class BlockEventListenerTest {
     void onBlockBreak() {
         BlockBreakEvent blockBreakEvent = new BlockBreakEvent(trackedBlock, player);
         assertTrue(blockBreakEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
     }
 
     @Test
     void onBlockBurn() {
         BlockBurnEvent blockBurnEvent = new BlockBurnEvent(trackedBlock, notTrackedBlock);
         assertTrue(blockBurnEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
     }
 
     @Test
     void onBlockFade() {
         BlockFadeEvent blockFadeEvent= new BlockFadeEvent(trackedBlock, trackedBlock.getState());
         assertTrue(blockFadeEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
     }
 
     @Test
     void onBlockForm() {
         BlockFormEvent blockFormEvent = new BlockFormEvent(trackedBlock,trackedBlock.getState());
         assertTrue(blockFormEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
     }
 
     @Test
@@ -101,13 +101,13 @@ class BlockEventListenerTest {
         BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent(trackedBlock,trackedBlock.getState(),
                 trackedBlock.getRelative(BlockFace.UP),ItemStack.empty(),player,true, EquipmentSlot.HAND);
         assertTrue(blockPlaceEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
     }
 
     @Test
     void onLeavesDecay() {
         LeavesDecayEvent leavesDecayEvent = new LeavesDecayEvent(trackedBlock);
         assertTrue(leavesDecayEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
     }
 }

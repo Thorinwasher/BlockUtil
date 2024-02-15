@@ -27,28 +27,28 @@ public class BlockGrowEventListener implements Listener {
         Material blockType = event.getNewState().getType();
         if (blockType == Material.CACTUS || blockType == Material.SUGAR_CANE) {
             Block down = event.getBlock().getRelative(BlockFace.DOWN);
-            if (api.blockIsTracked(down)) {
-                api.trackBlock(event.getBlock());
+            if (api.blockCanNotDropItems(down)) {
+                api.disableItemDrops(event.getBlock());
             }
         }
 
         if ((blockType == Material.PUMPKIN || blockType == Material.MELON)
-                && BlockHelper.getAdjacentBlocks(event.getBlock()).stream().filter(block -> Tag.CROPS.isTagged(block.getType())).anyMatch(api::blockIsTracked)) {
-            api.trackBlock(event.getBlock());
+                && BlockHelper.getAdjacentBlocks(event.getBlock()).stream().filter(block -> Tag.CROPS.isTagged(block.getType())).anyMatch(api::blockCanNotDropItems)) {
+            api.disableItemDrops(event.getBlock());
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onStructureGrow(StructureGrowEvent event) {
-        if (api.blockIsTracked(event.getLocation().getBlock())) {
-            event.getBlocks().stream().map(BlockState::getBlock).forEach(api::trackBlock);
+        if (api.blockCanNotDropItems(event.getLocation().getBlock())) {
+            event.getBlocks().stream().map(BlockState::getBlock).forEach(api::disableItemDrops);
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onBlockSpread(BlockSpreadEvent event) {
-        if (api.blockIsTracked(event.getSource())) {
-            api.trackBlock(event.getBlock());
+        if (api.blockCanNotDropItems(event.getSource())) {
+            api.disableItemDrops(event.getBlock());
         }
     }
 

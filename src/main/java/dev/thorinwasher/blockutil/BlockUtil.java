@@ -58,10 +58,10 @@ public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
     }
 
     @Override
-    public void trackBlock(Block block) {
+    public void disableItemDrops(Block block) {
         List<Block> blockStructure = BlockHelper.getBlockStructure(block);
         blockStructure.forEach(blockInStructure -> {
-            if (blockIsTracked(block)) {
+            if (blockCanNotDropItems(block)) {
                 return;
             }
             BlockLocation blockLocation = new BlockLocation(blockInStructure.getLocation());
@@ -71,10 +71,10 @@ public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
     }
 
     @Override
-    public void freeBlock(Block block) {
+    public void enableItemDrops(Block block) {
         List<Block> blockStructure = BlockHelper.getBlockStructure(block);
         blockStructure.forEach(blockInStructure -> {
-            if (!blockIsTracked(block)) {
+            if (!blockCanNotDropItems(block)) {
                 return;
             }
             BlockLocation blockLocation = new BlockLocation(blockInStructure.getLocation());
@@ -85,13 +85,13 @@ public class BlockUtil extends JavaPlugin implements BlockUtilAPI {
     }
 
     @Override
-    public boolean blockIsTracked(Block block) {
+    public boolean blockCanNotDropItems(Block block) {
         return trackedBlocks.contains(new BlockLocation(block.getLocation()));
     }
 
     @Override
     public void moveBlock(Block from, BlockVector delta) {
-        if (!blockIsTracked(from)) {
+        if (!blockCanNotDropItems(from)) {
             return;
         }
         BlockLocation blockLocation = new BlockLocation(from.getLocation());

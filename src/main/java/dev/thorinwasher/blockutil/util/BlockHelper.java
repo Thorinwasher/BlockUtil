@@ -2,7 +2,6 @@ package dev.thorinwasher.blockutil.util;
 
 import dev.thorinwasher.blockutil.api.BlockUtilAPI;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
@@ -13,9 +12,7 @@ import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.PistonHead;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class BlockHelper {
     private BlockHelper() {
@@ -59,11 +56,11 @@ public class BlockHelper {
         } else {
             block.setType(Material.AIR);
         }
-        api.freeBlock(block);
+        api.enableItemDrops(block);
     }
 
     public static void breakBlockIfTracked(Block block, BlockUtilAPI api) {
-        if (!api.blockIsTracked(block)) {
+        if (!api.blockCanNotDropItems(block)) {
             return;
         }
         breakBlock(block, api);

@@ -3,7 +3,6 @@ package dev.thorinwasher.blockutil.listener;
 import dev.thorinwasher.blockutil.BlockUtil;
 import dev.thorinwasher.blockutil.util.BlockHelper;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,29 +27,29 @@ public class BlockEventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     void onBlockDropItem(BlockDropItemEvent event) {
-        if (api.blockIsTracked(event.getBlock())) {
+        if (api.blockCanNotDropItems(event.getBlock())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onBlockBreak(BlockBreakEvent event) {
-        api.freeBlock(event.getBlock());
+        api.enableItemDrops(event.getBlock());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onBlockBurn(BlockBurnEvent event) {
-        api.freeBlock(event.getBlock());
+        api.enableItemDrops(event.getBlock());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onBlockFade(BlockFadeEvent event) {
-        api.freeBlock(event.getBlock());
+        api.enableItemDrops(event.getBlock());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onBlockForm(BlockFormEvent event) {
-        api.freeBlock(event.getBlock());
+        api.enableItemDrops(event.getBlock());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
@@ -60,7 +59,7 @@ public class BlockEventListener implements Listener {
             api.moveBlock(event.getBlock(), delta);
             return;
         }
-        if (api.blockIsTracked(event.getToBlock())) {
+        if (api.blockCanNotDropItems(event.getToBlock())) {
             event.setCancelled(true);
             BlockHelper.breakBlock(event.getToBlock(), api);
         }
@@ -68,7 +67,7 @@ public class BlockEventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onLeavesDecay(LeavesDecayEvent event) {
-        api.freeBlock(event.getBlock());
+        api.enableItemDrops(event.getBlock());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
@@ -77,7 +76,7 @@ public class BlockEventListener implements Listener {
         if (block.getType().isAir()) {
             return;
         }
-        if (!block.getBlockData().isSupported(block) && api.blockIsTracked(block)) {
+        if (!block.getBlockData().isSupported(block) && api.blockCanNotDropItems(block)) {
             event.setCancelled(true);
             BlockHelper.breakBlock(block, api);
         }

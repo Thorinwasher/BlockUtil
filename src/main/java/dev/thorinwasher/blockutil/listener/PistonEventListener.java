@@ -2,7 +2,6 @@ package dev.thorinwasher.blockutil.listener;
 
 import dev.thorinwasher.blockutil.BlockUtil;
 import dev.thorinwasher.blockutil.util.BlockHelper;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
@@ -25,16 +24,16 @@ public class PistonEventListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     void onBlockPistonExtend(BlockPistonExtendEvent event) {
         handlePistonEvent(event.getBlocks(), event.getDirection());
-        if (api.blockIsTracked(event.getBlock())) {
-            api.trackBlock(event.getBlock().getRelative(event.getDirection()));
+        if (api.blockCanNotDropItems(event.getBlock())) {
+            api.disableItemDrops(event.getBlock().getRelative(event.getDirection()));
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     void onBlockPistonRetract(BlockPistonRetractEvent event) {
         handlePistonEvent(event.getBlocks(), event.getDirection());
-        if (api.blockIsTracked(event.getBlock()) && event.getBlocks().isEmpty()) {
-            api.freeBlock(event.getBlock().getRelative(event.getDirection().getOppositeFace()));
+        if (api.blockCanNotDropItems(event.getBlock()) && event.getBlocks().isEmpty()) {
+            api.enableItemDrops(event.getBlock().getRelative(event.getDirection().getOppositeFace()));
         }
     }
 

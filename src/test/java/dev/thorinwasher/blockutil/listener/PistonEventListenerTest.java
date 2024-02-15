@@ -33,7 +33,7 @@ class PistonEventListenerTest {
         this.world = serverMock.addSimpleWorld("world");
         this.trackedBlock = new BlockMock(new Location(world, 0, 0, 0));
         this.notTrackedBlock = new BlockMock(new Location(world, 1, 0, 0));
-        blockUtil.trackBlock(trackedBlock);
+        blockUtil.disableItemDrops(trackedBlock);
     }
 
     @AfterEach
@@ -45,18 +45,18 @@ class PistonEventListenerTest {
     void onBlockPistonExtend() {
         BlockPistonExtendEvent blockPistonExtendEvent = new BlockPistonExtendEvent(notTrackedBlock, List.of(trackedBlock, notTrackedBlock), BlockFace.UP);
         assertTrue(blockPistonExtendEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
-        assertTrue(blockUtil.blockIsTracked(trackedBlock.getRelative(BlockFace.UP)));
-        assertFalse(blockUtil.blockIsTracked(notTrackedBlock.getRelative(BlockFace.UP)));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
+        assertTrue(blockUtil.blockCanNotDropItems(trackedBlock.getRelative(BlockFace.UP)));
+        assertFalse(blockUtil.blockCanNotDropItems(notTrackedBlock.getRelative(BlockFace.UP)));
     }
 
     @Test
     void onBlockPistonRetract() {
         BlockPistonRetractEvent blockPistonExtendEvent = new BlockPistonRetractEvent(notTrackedBlock, List.of(trackedBlock, notTrackedBlock), BlockFace.UP);
         assertTrue(blockPistonExtendEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
-        assertTrue(blockUtil.blockIsTracked(trackedBlock.getRelative(BlockFace.UP)));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
+        assertTrue(blockUtil.blockCanNotDropItems(trackedBlock.getRelative(BlockFace.UP)));
         Block movedNotTrackedBlock = notTrackedBlock.getRelative(BlockFace.UP);
-        assertFalse(blockUtil.blockIsTracked(movedNotTrackedBlock));
+        assertFalse(blockUtil.blockCanNotDropItems(movedNotTrackedBlock));
     }
 }

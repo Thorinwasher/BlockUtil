@@ -31,7 +31,7 @@ class ExplodeEventListenerTest {
         this.world = serverMock.addSimpleWorld("world");
         this.trackedBlock = new BlockMock(new Location(world, 0, 0, 0));
         this.notTrackedBlock = new BlockMock(new Location(world, 1, 0, 0));
-        blockUtil.trackBlock(trackedBlock);
+        blockUtil.disableItemDrops(trackedBlock);
     }
 
     @AfterEach
@@ -43,7 +43,7 @@ class ExplodeEventListenerTest {
     void onBlockExplode() {
         BlockExplodeEvent blockExplodeEvent = new BlockExplodeEvent(notTrackedBlock, List.of(trackedBlock), 1, notTrackedBlock.getState());
         assertTrue(blockExplodeEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
     }
 
     @Test
@@ -52,6 +52,6 @@ class ExplodeEventListenerTest {
         EntityExplodeEvent entityExplodeEvent = new EntityExplodeEvent(world.spawnEntity(location, EntityType.BAT),location,
                 List.of(trackedBlock, notTrackedBlock),1);
         assertTrue(entityExplodeEvent.callEvent());
-        assertFalse(blockUtil.blockIsTracked(trackedBlock));
+        assertFalse(blockUtil.blockCanNotDropItems(trackedBlock));
     }
 }

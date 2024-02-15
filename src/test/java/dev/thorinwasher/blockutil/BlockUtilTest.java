@@ -35,38 +35,38 @@ class BlockUtilTest {
     @Test
     void trackBlock() {
         Block block = new BlockMock(new Location(world, 0, 2, 3));
-        plugin.trackBlock(block);
-        assertTrue(plugin.blockIsTracked(block));
+        plugin.disableItemDrops(block);
+        assertTrue(plugin.blockCanNotDropItems(block));
     }
 
     @Test
     void trackBlock_reload() {
         Block block = new BlockMock(new Location(world, 0, 2, 3));
-        plugin.trackBlock(block);
-        assertTrue(plugin.blockIsTracked(block));
+        plugin.disableItemDrops(block);
+        assertTrue(plugin.blockCanNotDropItems(block));
         server.getPluginManager().disablePlugin(plugin);
         server.getScheduler().waitAsyncTasksFinished();
         server.getPluginManager().enablePlugin(plugin);
-        assertTrue(plugin.blockIsTracked(block));
+        assertTrue(plugin.blockCanNotDropItems(block));
     }
 
     @Test
     void freeBlock() {
         Block block = new BlockMock(new Location(world, 0, 2, 3));
-        plugin.trackBlock(block);
-        assertTrue(plugin.blockIsTracked(block));
-        plugin.freeBlock(block);
-        assertFalse(plugin.blockIsTracked(block));
+        plugin.disableItemDrops(block);
+        assertTrue(plugin.blockCanNotDropItems(block));
+        plugin.enableItemDrops(block);
+        assertFalse(plugin.blockCanNotDropItems(block));
     }
 
     @Test
     void moveBlock() {
         Block from = new BlockMock(new Location(world, 0, 2, 3));
         Block to = new BlockMock(new Location(world, 1, 2, 3));
-        plugin.trackBlock(from);
-        assertTrue(plugin.blockIsTracked(from));
+        plugin.disableItemDrops(from);
+        assertTrue(plugin.blockCanNotDropItems(from));
         plugin.moveBlock(from, new BlockVector(1,0,0));
-        assertTrue(plugin.blockIsTracked(to));
-        assertFalse(plugin.blockIsTracked(from));
+        assertTrue(plugin.blockCanNotDropItems(to));
+        assertFalse(plugin.blockCanNotDropItems(from));
     }
 }
