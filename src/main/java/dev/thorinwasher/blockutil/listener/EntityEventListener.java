@@ -25,7 +25,7 @@ public class EntityEventListener implements Listener {
         this.blockUtilAPI = blockUtilAPI;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onMonsterSpawn(CreatureSpawnEvent event) {
         Block baseBlock = event.getLocation().getBlock();
         if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.BUILD_SNOWMAN && checkSnowman(baseBlock)) {
@@ -74,7 +74,7 @@ public class EntityEventListener implements Listener {
         return blockStream.anyMatch(blockUtilAPI::blockCanNotDropItems);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onEntityChangeBlock(EntityChangeBlockEvent event) {
         if (event.getEntity() instanceof FallingBlock fallingBlock) {
             if (event.getBlock().getType().isAir()) {

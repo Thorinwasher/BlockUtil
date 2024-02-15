@@ -25,7 +25,7 @@ public class BlockEventListener implements Listener {
         this.api = api;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onBlockDropItem(BlockDropItemEvent event) {
         if (api.blockCanNotDropItems(event.getBlock())) {
             event.setCancelled(true);
@@ -52,7 +52,7 @@ public class BlockEventListener implements Listener {
         api.enableItemDrops(event.getBlock());
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onBlockFromTo(BlockFromToEvent event) {
         if (event.getBlock().getType() == Material.DRAGON_EGG) {
             BlockVector delta = event.getToBlock().getLocation().subtract(event.getBlock().getLocation()).toVector().toBlockVector();
@@ -65,12 +65,15 @@ public class BlockEventListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onLeavesDecay(LeavesDecayEvent event) {
-        api.enableItemDrops(event.getBlock());
+        if(api.blockCanNotDropItems(event.getBlock())) {
+            event.setCancelled(true);
+            BlockHelper.breakBlock(event.getBlock(), api);
+        }
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onBlockPhysicsEvent(BlockPhysicsEvent event) {
         Block block = event.getBlock();
         if (block.getType().isAir()) {
