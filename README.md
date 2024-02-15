@@ -5,7 +5,7 @@ A library that is meant to assist in block management. Currently it only has 4 a
 <dependency>
     <groupId>com.github.Thorinwasher</groupId>
     <artifactId>BlockUtil</artifactId>
-    <version>main-SNAPSHOT</version>
+    <version>v1.0.0</version>
     <scope>provided</scope>
 </dependency>
 ```
