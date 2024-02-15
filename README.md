@@ -16,10 +16,10 @@ public void onEnable(){
     ServicesManager servicesManager = this.getServer().getServicesManager();
     RegisteredServiceProvider<BlockUtilAPI> blockUtilProvider = servicesManager.getRegistration(BlockUtilAPI.class);
     if (blockUtilProvider != null) {
-            this.blockUtilAPI = blockUtilProvider.getProvider();
-        } else {
-            throw new IllegalStateException("Unable to hook into BlockUil. Make sure the BlockUil plugin is installed " +
+        this.blockUtilAPI = blockUtilProvider.getProvider();
+    } else {
+        throw new IllegalStateException("Unable to hook into BlockUil. Make sure the BlockUil plugin is installed " +
                     "and enabled.");
-        }
+    }
 }
 ```
