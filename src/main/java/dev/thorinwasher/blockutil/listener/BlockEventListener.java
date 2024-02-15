@@ -14,6 +14,8 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.util.BlockVector;
 
+import java.util.logging.Level;
+
 public class BlockEventListener implements Listener {
 
     private final BlockUtil api;
@@ -49,13 +51,18 @@ public class BlockEventListener implements Listener {
         api.freeBlock(event.getBlock());
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     void onBlockFromTo(BlockFromToEvent event) {
-        if (event.getBlock().getType() != Material.DRAGON_EGG) {
+        if (event.getBlock().getType() == Material.DRAGON_EGG) {
+            BlockVector delta = event.getToBlock().getLocation().subtract(event.getBlock().getLocation()).toVector().toBlockVector();
+            api.moveBlock(event.getBlock(), delta);
             return;
         }
-        BlockVector delta = event.getToBlock().getLocation().subtract(event.getBlock().getLocation()).toVector().toBlockVector();
-        api.moveBlock(event.getBlock(), delta);
+        if(api.blockIsTracked(event.getToBlock())){
+            event.setCancelled(true);
+            event.getToBlock().setType(Material.AIR);
+            api.freeBlock(event.getToBlock());
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

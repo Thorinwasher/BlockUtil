@@ -1,7 +1,7 @@
 package dev.thorinwasher.blockutil.util;
 
+import dev.thorinwasher.blockutil.api.BlockUtilAPI;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
@@ -10,15 +10,15 @@ import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.PistonHead;
-import org.bukkit.block.data.type.TrapDoor;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class BlockHelper {
 
-    private static final Set<Material> NEEDS_BLOCK_BELOW = getNeedsBlockBelow();
+
+    private BlockHelper(){
+        throw new IllegalStateException("Utility class");
+    }
 
     public static List<Block> getBlockStructure(Block block) {
         BlockData blockData = block.getBlockData();
@@ -51,7 +51,8 @@ public class BlockHelper {
         return List.of(block);
     }
 
-    public static boolean needsBlockBelow(Block block) {
-        return NEEDS_BLOCK_BELOW.contains(block.getType());
+    public static void breakBlock(Block block, BlockUtilAPI api){
+        block.setType(Material.AIR);
+        api.freeBlock(block);
     }
 }

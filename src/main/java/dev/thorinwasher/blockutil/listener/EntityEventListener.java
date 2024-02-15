@@ -1,8 +1,14 @@
 package dev.thorinwasher.blockutil.listener;
 
 import dev.thorinwasher.blockutil.BlockUtil;
+import dev.thorinwasher.blockutil.util.BlockHelper;
+import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -10,6 +16,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 public class EntityEventListener implements Listener {
@@ -70,19 +77,30 @@ public class EntityEventListener implements Listener {
         return blockStream.anyMatch(blockUtilAPI::blockIsTracked);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     private void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if (!(event.getEntity() instanceof FallingBlock)) {
-            blockUtilAPI.freeBlock(event.getBlock());
-        }
-
-        if (event.getBlock().getType().isAir()) {
-            if (event.getEntity().getMetadata(NO_BLOCK_DROP).get(0).asBoolean()) {
-                blockUtilAPI.trackBlock(event.getBlock());
+        if (event.getEntity() instanceof FallingBlock fallingBlock) {
+            if (event.getBlock().getType().isAir()) {
+                if (fallingBlock.getMetadata(NO_BLOCK_DROP).get(0).asBoolean()) {
+                    blockUtilAPI.trackBlock(event.getBlock());
+                }
+            } else if (blockUtilAPI.blockIsTracked(event.getBlock())) {
+                event.getEntity().setMetadata(NO_BLOCK_DROP, new FixedMetadataValue(blockUtilAPI, true));
+                fallingBlock.setDropItem(false);
+                blockUtilAPI.freeBlock(event.getBlock());
             }
-        } else if (blockUtilAPI.blockIsTracked(event.getBlock())) {
-            event.getEntity().setMetadata(NO_BLOCK_DROP, new FixedMetadataValue(blockUtilAPI, true));
-            blockUtilAPI.freeBlock(event.getBlock());
+            return;
+        }
+        if(event.getEntity() instanceof Wither){
+            BlockHelper.breakBlock(event.getBlock(), blockUtilAPI);
+        }
+        if(event.getBlock().getType() == Material.FARMLAND){
+            Block up = event.getBlock().getRelative(BlockFace.UP);
+            if(blockUtilAPI.blockIsTracked(up)){
+                event.setCancelled(true);
+                BlockHelper.breakBlock(up, blockUtilAPI);
+                event.getBlock().setBlockData(event.getBlockData());
+            }
         }
     }
 }
