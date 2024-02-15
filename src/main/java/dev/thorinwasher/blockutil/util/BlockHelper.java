@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Piston;
@@ -57,7 +58,11 @@ public class BlockHelper {
     }
 
     public static void breakBlock(Block block, BlockUtilAPI api) {
-        block.setType(Material.AIR);
+        if(block.getBlockData() instanceof Waterlogged waterlogged){
+            block.setType(waterlogged.isWaterlogged() ? Material.WATER : Material.AIR);
+        } else {
+            block.setType(Material.AIR);
+        }
         api.freeBlock(block);
     }
 

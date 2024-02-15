@@ -14,8 +14,6 @@ import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 
-import java.util.logging.Level;
-
 public class BlockGrowEventListener implements Listener {
 
     private final BlockUtil api;
