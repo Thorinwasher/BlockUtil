@@ -18,3 +18,5 @@ buildNumber.properties
 # IDEA generated files
 *.idea
 *.iml
+.gradle
+build/
