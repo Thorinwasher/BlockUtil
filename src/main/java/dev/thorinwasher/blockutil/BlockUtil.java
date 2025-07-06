@@ -51,7 +51,7 @@ public class BlockUtil implements BlockUtilAPI {
             BlockPosition blockLocation = BlockPosition.from(blockInStructure.getLocation());
             blockItemDropsDisabled(blockLocation, worldUuid)
                     .thenAcceptAsync((itemDropsDisabled) -> {
-                        if (!itemDropsDisabled) {
+                        if (itemDropsDisabled) {
                             return;
                         }
                         trackedBlocks.get(worldUuid).add(blockLocation);
@@ -80,10 +80,9 @@ public class BlockUtil implements BlockUtilAPI {
 
     @Override
     public CompletableFuture<Boolean> blockItemDropsDisabled(BlockPosition block, UUID worldUuid) {
-        return CompletableFuture.supplyAsync(() -> {
-            Set<BlockPosition> positions = trackedBlocks.get(worldUuid);
-            return positions != null && positions.contains(block);
-        }, executor);
+        return CompletableFuture.supplyAsync(() ->
+                        trackedBlocks.computeIfAbsent(worldUuid, ignored -> new HashSet<>()).contains(block),
+                executor);
     }
 
     @Override
