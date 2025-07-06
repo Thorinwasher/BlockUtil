@@ -29,7 +29,7 @@ public class BlockEventListener implements Listener {
         if (!api.blockItemDropsDisabled(event.getBlock())) {
             return;
         }
-        BlockDisableDropEvent blockDisableDropEvent = api.newDisable(event.getBlock());
+        BlockDisableDropEvent blockDisableDropEvent = api.newDisable(event.getBlockState());
         if (blockDisableDropEvent.disableDrops()) {
             List<Item> items = event.getItems();
             items.clear();
@@ -99,7 +99,7 @@ public class BlockEventListener implements Listener {
         if (block.getBlockData().isSupported(block) || !api.blockItemDropsDisabled(block)) {
             return;
         }
-        BlockDisableDropEvent disableDropEvent = api.newDisable(block);
+        BlockDisableDropEvent disableDropEvent = api.newDisable(event.getBlock().getState());
         if (!disableDropEvent.disableDrops()) {
             return;
         }

@@ -9,6 +9,7 @@ import dev.thorinwasher.blockutil.util.BlockHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.BlockVector;
@@ -118,7 +119,7 @@ public class BlockUtil implements BlockUtilAPI {
                 .forEach(worldUuid -> trackedBlocks.put(worldUuid, databaseInterface.getAllBlocks(worldUuid).join())));
     }
 
-    public BlockDisableDropEvent newDisable(Block block) {
+    public BlockDisableDropEvent newDisable(BlockState block) {
         BlockDisableDropEvent output = new BlockDisableDropEvent(block);
         dropEventHandler.accept(output);
         return output;
