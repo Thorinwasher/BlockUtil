@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.Thorinwasher:BlockUtil:v2.0.0")
+    implementation("com.github.Thorinwasher.BlockUtil:blockutil:v2.1.3")
 }
 ```
 
