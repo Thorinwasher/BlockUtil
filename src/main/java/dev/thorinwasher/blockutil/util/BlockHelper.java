@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
@@ -53,7 +54,7 @@ public class BlockHelper {
     }
 
     public static void breakBlock(Block block, BlockUtil api) {
-        BlockDisableDropEvent blockDisableDropEvent = api.newDisable(block);
+        BlockDisableDropEvent blockDisableDropEvent = api.newDisable(block.getState());
         if (!blockDisableDropEvent.disableDrops()) {
             return;
         }
