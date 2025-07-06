@@ -8,11 +8,11 @@ public enum SQLQuery {
 
     private final String fileName;
 
-    SQLQuery(String fileName){
+    SQLQuery(String fileName) {
         this.fileName = fileName;
     }
 
-    public String getFileName(){
+    public String getFileName() {
         return this.fileName;
     }
 }

@@ -1,4 +1,5 @@
-INSERT OR IGNORE INTO @blockTable@
+INSERT
+OR IGNORE INTO @blockTable@
 (
     x,
     y,

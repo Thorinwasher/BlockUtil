@@ -1,7 +1,6 @@
 package dev.thorinwasher.blockutil.listener;
 
 import dev.thorinwasher.blockutil.BlockUtil;
-import dev.thorinwasher.blockutil.api.BlockUtilAPI;
 import dev.thorinwasher.blockutil.util.BlockHelper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

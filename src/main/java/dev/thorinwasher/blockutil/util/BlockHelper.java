@@ -54,7 +54,7 @@ public class BlockHelper {
 
     public static void breakBlock(Block block, BlockUtil api) {
         BlockDisableDropEvent blockDisableDropEvent = api.newDisable(block);
-        if (!blockDisableDropEvent.getDisableDrops()) {
+        if (!blockDisableDropEvent.disableDrops()) {
             return;
         }
         if (block.getBlockData() instanceof Waterlogged waterlogged) {

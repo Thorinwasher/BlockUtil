@@ -1,6 +1,7 @@
 # BlockUtil
 
 A library that is meant to assist in block management.
+
 ```kts
 repositories {
     maven("https://jitpack.io")
@@ -12,8 +13,9 @@ dependencies {
 ```
 
 ```java
+
 @Override
-public void onEnable(){
+public void onEnable() {
     // Initialize block util and get the API
     BlockUtilAPI blockUtilAPI = new BlockUtilAPI.Builder()
             .withConnectionSupplier(() -> myDatabaseHandler.getConnection())
@@ -21,6 +23,6 @@ public void onEnable(){
             .withPluginOwner(this)
             .build();
     // Example use case
-    blockUtilAPI.disableItemDrops(myBlock); 
+    blockUtilAPI.disableItemDrops(myBlock);
 }
 ```

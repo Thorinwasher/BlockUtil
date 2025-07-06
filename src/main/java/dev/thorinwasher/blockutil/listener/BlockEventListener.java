@@ -30,7 +30,7 @@ public class BlockEventListener implements Listener {
             return;
         }
         BlockDisableDropEvent blockDisableDropEvent = api.newDisable(event.getBlock());
-        if (blockDisableDropEvent.getDisableDrops()) {
+        if (blockDisableDropEvent.disableDrops()) {
             List<Item> items = event.getItems();
             items.clear();
             Location location = event.getBlock().getLocation().toCenterLocation();
@@ -43,10 +43,14 @@ public class BlockEventListener implements Listener {
                     })
                     .forEach(items::add);
         }
+        api.enableItemDrops(event.getBlock());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onBlockBreak(BlockBreakEvent event) {
+        if (event.isDropItems()) {
+            return; // Handled in this#onBlockDropItem
+        }
         api.enableItemDrops(event.getBlock());
     }
 
@@ -96,7 +100,7 @@ public class BlockEventListener implements Listener {
             return;
         }
         BlockDisableDropEvent disableDropEvent = api.newDisable(block);
-        if (!disableDropEvent.getDisableDrops()) {
+        if (!disableDropEvent.disableDrops()) {
             return;
         }
         event.setCancelled(true);

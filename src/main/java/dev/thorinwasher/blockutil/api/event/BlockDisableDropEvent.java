@@ -9,7 +9,7 @@ import java.util.List;
 public class BlockDisableDropEvent {
 
     private final Block block;
-    private boolean disableDrops = false;
+    private boolean disableDrops = true;
     private List<ItemStack> dropOverride = List.of();
 
     @ApiStatus.Internal
@@ -25,7 +25,7 @@ public class BlockDisableDropEvent {
         return dropOverride;
     }
 
-    public boolean getDisableDrops() {
+    public boolean disableDrops() {
         return disableDrops;
     }
 
