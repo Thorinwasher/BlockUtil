@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "dev.thorinwasher"
-version = "2.1.0"
+version = "2.1.1"
 description = "A library that assists in block management."
 
 java {
