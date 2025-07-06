@@ -1,5 +1,6 @@
 package dev.thorinwasher.blockutil.listener;
 
+import dev.thorinwasher.blockutil.BlockUtil;
 import dev.thorinwasher.blockutil.api.BlockUtilAPI;
 import dev.thorinwasher.blockutil.util.BlockHelper;
 import org.bukkit.event.EventHandler;
@@ -10,9 +11,9 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class ExplodeEventListener implements Listener {
 
-    private final BlockUtilAPI plugin;
+    private final BlockUtil plugin;
 
-    public ExplodeEventListener(BlockUtilAPI plugin) {
+    public ExplodeEventListener(BlockUtil plugin) {
         this.plugin = plugin;
     }
 

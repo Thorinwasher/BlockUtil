@@ -7,14 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockDropItemEvent;
-import org.bukkit.event.block.BlockFadeEvent;
-import org.bukkit.event.block.BlockFormEvent;
-import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.util.BlockVector;
 
 public class BlockEventListener implements Listener {
@@ -27,7 +20,7 @@ public class BlockEventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onBlockDropItem(BlockDropItemEvent event) {
-        if (api.blockCanNotDropItems(event.getBlock())) {
+        if (api.blockItemDropsDisabled(event.getBlock())) {
             event.setCancelled(true);
         }
     }
@@ -59,7 +52,7 @@ public class BlockEventListener implements Listener {
             api.moveBlock(event.getBlock(), delta);
             return;
         }
-        if (api.blockCanNotDropItems(event.getToBlock())) {
+        if (api.blockItemDropsDisabled(event.getToBlock())) {
             event.setCancelled(true);
             BlockHelper.breakBlock(event.getToBlock(), api);
         }
@@ -67,7 +60,7 @@ public class BlockEventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onLeavesDecay(LeavesDecayEvent event) {
-        if(api.blockCanNotDropItems(event.getBlock())) {
+        if (api.blockItemDropsDisabled(event.getBlock())) {
             event.setCancelled(true);
             BlockHelper.breakBlock(event.getBlock(), api);
         }
@@ -79,7 +72,7 @@ public class BlockEventListener implements Listener {
         if (block.getType().isAir()) {
             return;
         }
-        if (!block.getBlockData().isSupported(block) && api.blockCanNotDropItems(block)) {
+        if (!block.getBlockData().isSupported(block) && api.blockItemDropsDisabled(block)) {
             event.setCancelled(true);
             BlockHelper.breakBlock(block, api);
         }

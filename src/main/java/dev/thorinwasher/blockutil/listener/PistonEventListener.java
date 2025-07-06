@@ -24,7 +24,7 @@ public class PistonEventListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onBlockPistonExtend(BlockPistonExtendEvent event) {
         handlePistonEvent(event.getBlocks(), event.getDirection());
-        if (api.blockCanNotDropItems(event.getBlock())) {
+        if (api.blockItemDropsDisabled(event.getBlock())) {
             api.disableItemDrops(event.getBlock().getRelative(event.getDirection()));
         }
     }
@@ -32,7 +32,7 @@ public class PistonEventListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onBlockPistonRetract(BlockPistonRetractEvent event) {
         handlePistonEvent(event.getBlocks(), event.getDirection());
-        if (api.blockCanNotDropItems(event.getBlock()) && event.getBlocks().isEmpty()) {
+        if (api.blockItemDropsDisabled(event.getBlock()) && event.getBlocks().isEmpty()) {
             api.enableItemDrops(event.getBlock().getRelative(event.getDirection().getOppositeFace()));
         }
     }

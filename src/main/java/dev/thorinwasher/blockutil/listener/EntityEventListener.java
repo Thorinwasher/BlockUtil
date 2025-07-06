@@ -3,6 +3,7 @@ package dev.thorinwasher.blockutil.listener;
 import dev.thorinwasher.blockutil.BlockUtil;
 import dev.thorinwasher.blockutil.util.BlockHelper;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.FallingBlock;
@@ -12,14 +13,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.stream.Stream;
 
 public class EntityEventListener implements Listener {
 
     private final BlockUtil blockUtilAPI;
-    private static final String NO_BLOCK_DROP = "noBlockDrop";
+    private static final NamespacedKey NO_BLOCK_DROP = new NamespacedKey("blockutil", "no_block_drop");
 
     public EntityEventListener(BlockUtil blockUtilAPI) {
         this.blockUtilAPI = blockUtilAPI;
@@ -31,7 +32,7 @@ public class EntityEventListener implements Listener {
         if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.BUILD_SNOWMAN && checkSnowman(baseBlock)) {
             event.setCancelled(true);
         }
-        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.BUILD_IRONGOLEM && checkIrongolem(baseBlock)) {
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.BUILD_IRONGOLEM && checkIronGolem(baseBlock)) {
             event.setCancelled(true);
         }
         if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.BUILD_WITHER && checkWither(baseBlock)) {
@@ -53,10 +54,10 @@ public class EntityEventListener implements Listener {
                 baseBlock.getRelative(0, 2, 1),
                 baseBlock.getRelative(0, 2, -1)
         );
-        return blockStream.anyMatch(blockUtilAPI::blockCanNotDropItems);
+        return blockStream.anyMatch(blockUtilAPI::blockItemDropsDisabled);
     }
 
-    private boolean checkIrongolem(Block baseBlock) {
+    private boolean checkIronGolem(Block baseBlock) {
         Stream<Block> blockStream = Stream.of(baseBlock,
                 baseBlock.getRelative(0, 1, 0),
                 baseBlock.getRelative(1, 1, 0),
@@ -64,25 +65,25 @@ public class EntityEventListener implements Listener {
                 baseBlock.getRelative(0, 1, 1),
                 baseBlock.getRelative(0, 1, -1),
                 baseBlock.getRelative(0, 2, 0));
-        return blockStream.anyMatch(blockUtilAPI::blockCanNotDropItems);
+        return blockStream.anyMatch(blockUtilAPI::blockItemDropsDisabled);
     }
 
     private boolean checkSnowman(Block baseBlock) {
         Stream<Block> blockStream = Stream.of(baseBlock,
                 baseBlock.getRelative(0, 1, 0),
                 baseBlock.getRelative(0, 2, 0));
-        return blockStream.anyMatch(blockUtilAPI::blockCanNotDropItems);
+        return blockStream.anyMatch(blockUtilAPI::blockItemDropsDisabled);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     private void onEntityChangeBlock(EntityChangeBlockEvent event) {
         if (event.getEntity() instanceof FallingBlock fallingBlock) {
             if (event.getBlock().getType().isAir()) {
-                if (fallingBlock.getMetadata(NO_BLOCK_DROP).get(0).asBoolean()) {
+                if (event.getEntity().getPersistentDataContainer().has(NO_BLOCK_DROP)) {
                     blockUtilAPI.disableItemDrops(event.getBlock());
                 }
-            } else if (blockUtilAPI.blockCanNotDropItems(event.getBlock())) {
-                event.getEntity().setMetadata(NO_BLOCK_DROP, new FixedMetadataValue(blockUtilAPI, true));
+            } else if (blockUtilAPI.blockItemDropsDisabled(event.getBlock())) {
+                event.getEntity().getPersistentDataContainer().set(NO_BLOCK_DROP, PersistentDataType.BOOLEAN, true);
                 fallingBlock.setDropItem(false);
                 blockUtilAPI.enableItemDrops(event.getBlock());
             }
@@ -93,7 +94,7 @@ public class EntityEventListener implements Listener {
         }
         if (event.getBlock().getType() == Material.FARMLAND) {
             Block up = event.getBlock().getRelative(BlockFace.UP);
-            if (blockUtilAPI.blockCanNotDropItems(up)) {
+            if (blockUtilAPI.blockItemDropsDisabled(up)) {
                 event.setCancelled(true);
                 BlockHelper.breakBlock(up, blockUtilAPI);
                 event.getBlock().setBlockData(event.getBlockData());

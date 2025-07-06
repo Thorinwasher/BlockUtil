@@ -60,7 +60,7 @@ public class BlockHelper {
     }
 
     public static void breakBlockIfTracked(Block block, BlockUtilAPI api) {
-        if (!api.blockCanNotDropItems(block)) {
+        if (!api.blockItemDropsDisabled(block)) {
             return;
         }
         breakBlock(block, api);
