@@ -1,6 +1,8 @@
 package dev.thorinwasher.blockutil.util;
 
-import dev.thorinwasher.blockutil.api.BlockUtilAPI;
+import dev.thorinwasher.blockutil.BlockUtil;
+import dev.thorinwasher.blockutil.api.event.BlockDisableDropEvent;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -50,16 +52,23 @@ public class BlockHelper {
         return List.of(block);
     }
 
-    public static void breakBlock(Block block, BlockUtilAPI api) {
-        if(block.getBlockData() instanceof Waterlogged waterlogged){
+    public static void breakBlock(Block block, BlockUtil api) {
+        BlockDisableDropEvent blockDisableDropEvent = api.newDisable(block);
+        if (!blockDisableDropEvent.getDisableDrops()) {
+            return;
+        }
+        if (block.getBlockData() instanceof Waterlogged waterlogged) {
             block.setType(waterlogged.isWaterlogged() ? Material.WATER : Material.AIR);
         } else {
             block.setType(Material.AIR);
         }
+        Location location = block.getLocation().toCenterLocation();
+        blockDisableDropEvent.getDropOverride()
+                .forEach(itemStack -> block.getWorld().dropItemNaturally(location, itemStack));
         api.enableItemDrops(block);
     }
 
-    public static void breakBlockIfTracked(Block block, BlockUtilAPI api) {
+    public static void breakBlockIfTracked(Block block, BlockUtil api) {
         if (!api.blockItemDropsDisabled(block)) {
             return;
         }

@@ -4,11 +4,13 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.List;
+
 public class BlockDisableDropEvent {
 
     private final Block block;
     private boolean disableDrops = false;
-    private ItemStack dropOverride;
+    private List<ItemStack> dropOverride = List.of();
 
     @ApiStatus.Internal
     public BlockDisableDropEvent(Block block) {
@@ -19,7 +21,7 @@ public class BlockDisableDropEvent {
         return block;
     }
 
-    public ItemStack getDropOverride() {
+    public List<ItemStack> getDropOverride() {
         return dropOverride;
     }
 
@@ -27,7 +29,7 @@ public class BlockDisableDropEvent {
         return disableDrops;
     }
 
-    public void setDropOverride(ItemStack dropOverride) {
+    public void setDropOverride(List<ItemStack> dropOverride) {
         this.dropOverride = dropOverride;
     }
 

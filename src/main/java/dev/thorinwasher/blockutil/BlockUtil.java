@@ -40,6 +40,7 @@ public class BlockUtil implements BlockUtilAPI {
         pluginManager.registerEvents(new ExplodeEventListener(this), plugin);
         pluginManager.registerEvents(new EntityEventListener(this), plugin);
         pluginManager.registerEvents(new BlockGrowEventListener(this), plugin);
+        pluginManager.registerEvents(new WorldEventListener(this), plugin);
     }
 
     @Override
@@ -101,9 +102,14 @@ public class BlockUtil implements BlockUtilAPI {
                 }, executor);
     }
 
-    public void onWorldLoad(UUID worldUuid, Set<BlockPosition> tracked) {
+    public void onWorldLoad(UUID worldUuid) {
+        databaseInterface.getAllBlocks(worldUuid)
+                .thenAcceptAsync(tracked -> trackedBlocks.put(worldUuid, tracked), executor);
+    }
+
+    public void onWorldUnload(UUID worldUuid) {
         executor.execute(() -> {
-            trackedBlocks.put(worldUuid, tracked);
+            trackedBlocks.remove(worldUuid);
         });
     }
 
@@ -111,5 +117,11 @@ public class BlockUtil implements BlockUtilAPI {
         executor.execute(() -> Bukkit.getWorlds().stream()
                 .map(World::getUID)
                 .forEach(worldUuid -> trackedBlocks.put(worldUuid, databaseInterface.getAllBlocks(worldUuid).join())));
+    }
+
+    public BlockDisableDropEvent newDisable(Block block) {
+        BlockDisableDropEvent output = new BlockDisableDropEvent(block);
+        dropEventHandler.accept(output);
+        return output;
     }
 }

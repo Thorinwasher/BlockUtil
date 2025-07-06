@@ -1,6 +1,5 @@
 plugins {
     `java-library`
-    id("com.gradleup.shadow") version "9.0.0-rc1"
 }
 
 group = "dev.thorinwasher"

@@ -1,14 +1,20 @@
 package dev.thorinwasher.blockutil.listener;
 
 import dev.thorinwasher.blockutil.BlockUtil;
+import dev.thorinwasher.blockutil.api.event.BlockDisableDropEvent;
 import dev.thorinwasher.blockutil.util.BlockHelper;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.util.BlockVector;
+
+import java.util.List;
 
 public class BlockEventListener implements Listener {
 
@@ -20,8 +26,22 @@ public class BlockEventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     void onBlockDropItem(BlockDropItemEvent event) {
-        if (api.blockItemDropsDisabled(event.getBlock())) {
-            event.setCancelled(true);
+        if (!api.blockItemDropsDisabled(event.getBlock())) {
+            return;
+        }
+        BlockDisableDropEvent blockDisableDropEvent = api.newDisable(event.getBlock());
+        if (blockDisableDropEvent.getDisableDrops()) {
+            List<Item> items = event.getItems();
+            items.clear();
+            Location location = event.getBlock().getLocation().toCenterLocation();
+            blockDisableDropEvent.getDropOverride()
+                    .stream()
+                    .map(itemStack -> {
+                        Item item = event.getBlock().getWorld().createEntity(location, Item.class);
+                        item.setItemStack(itemStack);
+                        return item;
+                    })
+                    .forEach(items::add);
         }
     }
 
@@ -72,9 +92,18 @@ public class BlockEventListener implements Listener {
         if (block.getType().isAir()) {
             return;
         }
-        if (!block.getBlockData().isSupported(block) && api.blockItemDropsDisabled(block)) {
-            event.setCancelled(true);
-            BlockHelper.breakBlock(block, api);
+        if (block.getBlockData().isSupported(block) || !api.blockItemDropsDisabled(block)) {
+            return;
         }
+        BlockDisableDropEvent disableDropEvent = api.newDisable(block);
+        if (!disableDropEvent.getDisableDrops()) {
+            return;
+        }
+        event.setCancelled(true);
+        World world = block.getWorld();
+        Location location = block.getLocation().toCenterLocation();
+        disableDropEvent.getDropOverride().stream()
+                .forEach(itemStack -> world.dropItemNaturally(location, itemStack));
+        BlockHelper.breakBlock(block, api);
     }
 }
