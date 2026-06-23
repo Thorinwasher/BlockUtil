@@ -90,7 +90,9 @@ public class EntityEventListener implements Listener {
             return;
         }
         if (event.getEntity() instanceof Wither) {
-            BlockHelper.breakBlock(event.getBlock(), blockUtilAPI);
+            if (blockUtilAPI.blockItemDropsDisabled(event.getBlock())) {
+                BlockHelper.breakBlock(event.getBlock(), blockUtilAPI);
+            }
         }
         if (event.getBlock().getType() == Material.FARMLAND) {
             Block up = event.getBlock().getRelative(BlockFace.UP);
