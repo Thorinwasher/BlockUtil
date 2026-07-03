@@ -2,6 +2,7 @@ package dev.thorinwasher.blockutil.listener;
 
 import dev.thorinwasher.blockutil.BlockUtil;
 import dev.thorinwasher.blockutil.util.BlockHelper;
+import org.bukkit.ExplosionResult;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,11 +19,17 @@ public class ExplodeEventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onBlockExplode(BlockExplodeEvent event) {
+        if (event.getExplosionResult() != ExplosionResult.DESTROY) {
+            return;
+        }
         event.blockList().forEach(block -> BlockHelper.breakBlockIfTracked(block, plugin));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     void onEntityExplode(EntityExplodeEvent event) {
+        if (event.getExplosionResult() != ExplosionResult.DESTROY) {
+            return;
+        }
         event.blockList().forEach(block -> BlockHelper.breakBlockIfTracked(block, plugin));
     }
 }
